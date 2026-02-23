@@ -27,21 +27,17 @@ const Gantt = forwardRef(({ timeline = [], playing }, ref) => {
         {timeline.map((seg, idx) => {
           const width = (seg.end - seg.start) // in time units
           const color = COLORS[idx % COLORS.length]
-          const animDuration = Math.max(0.25, width * 0.22) // seconds
-          const animDelay = Math.max(0, seg.start * 0.18) // stagger by start time
           return (
             <div
               key={idx}
-              className={`g-seg ${played ? 'play' : ''}`}
+              className="g-seg"
               title={`${seg.pid} [${seg.start} → ${seg.end}]`}
               style={{
                 gridColumn: `span ${width}`,
                 background: `linear-gradient(135deg, ${color}, rgba(255,255,255,0.06))`,
-                transformOrigin: 'left center',
-                transform: played ? 'scaleX(1)' : 'scaleX(0)',
-                transition: 'box-shadow 300ms ease',
-                animation: played ? `grow ${animDuration}s cubic-bezier(.2,.9,.2,1) ${animDelay}s forwards` : 'none',
-                boxShadow: '0 10px 30px rgba(2,6,23,0.45)'
+                transition: 'opacity 600ms ease',
+                opacity: played ? 1 : 0,
+                boxShadow: '0 6px 18px rgba(0,0,0,0.12)'
               }}
             >
               <div className="g-label">{seg.pid}</div>
