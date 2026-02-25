@@ -1,85 +1,67 @@
-import React, { useEffect, useMemo } from 'react'
+import React from 'react';
+import './Background.css';
 
 export default function Background() {
-  // generate stable star positions per mount
-  const stars = useMemo(() => {
-    const N = 140
-    const arr = []
-    for (let i = 0; i < N; i++) {
-      arr.push({
-        id: i,
-        left: Math.random() * 100,                // percent
-        top: Math.random() * 100,                 // percent
-        size: 0.8 + Math.random() * 2.8,          // px
-        twinkle: 1.8 + Math.random() * 3.6,       // seconds
-        drift: 18 + Math.random() * 36,           // seconds
-        delay: Math.random() * 6,                 // seconds
-        opacity: 0.45 + Math.random() * 0.6
-      })
-    }
-    return arr
-  }, [])
+  const birdCount = 7;
+  const bubbleCount = 12;
+  const particleCount = 40;
+  const fishCount = 6;
 
-  useEffect(() => {
-    const onMove = (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2 // -1..1
-      const y = (e.clientY / window.innerHeight - 0.5) * 2
-      document.documentElement.style.setProperty('--mx', (x * 6).toFixed(2) + 'px')
-      document.documentElement.style.setProperty('--my', (y * 4).toFixed(2) + 'px')
-    }
-    window.addEventListener('mousemove', onMove)
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [])
-
-  // moving objects
-  const objs = useMemo(() => {
-    return Array.from({ length: 9 }).map((_, i) => {
-      const left = 6 + (i * 10) % 84
-      const delay = (i * 0.8) % 6
-      const dur = 12 + (i % 4) * 4
-      return { id: i, left: `${left}%`, delay: `${delay}s`, dur: `${dur}s`, type: i % 3 }
-    })
-  }, [])
-
-  // Single parent wrapper for all animated background pieces
   return (
-    <div className="bg-anim starfield" aria-hidden="true">
-      {/* subtle large color blobs (kept low opacity) */}
-      <span className="blob b1" />
-      <span className="blob b2" />
-      <span className="blob b3" />
-      <div className="particles" />
+    <div className="subhiksha-bg" aria-hidden="true">
+      <div className="stars" />
+      <div className="orbs">
+        <div className="orb orb-1" />
+        <div className="orb orb-2" />
+        <div className="orb orb-3" />
+      </div>
 
-      {/* generated stars */}
-      {stars.map(s => (
-        <span
-          key={s.id}
-          className="star"
-          style={{
-            left: `${s.left}%`,
-            top: `${s.top}%`,
-            width: `${s.size}px`,
-            height: `${s.size}px`,
-            opacity: s.opacity,
-            animation: `twinkle ${s.twinkle}s ease-in-out ${s.delay}s infinite, drift ${s.drift}s linear ${s.delay}s infinite`
-          }}
-        />
-      ))}
+      <svg className="wave" viewBox="0 0 1200 200" preserveAspectRatio="none">
+        <path d="M0,80 C300,150 900,0 1200,80 L1200,200 L0,200 Z" />
+      </svg>
 
-      {/* moving objects (orbs / comets) */}
-      <div className="moving-objects" aria-hidden="true">
-        {objs.map(o => (
-          <div
-            key={o.id}
-            className={`mobj mobj--type${o.type}`}
-            style={{
-              left: o.left,
-              animationDelay: o.delay,
-              animationDuration: o.dur
-            }}
-          />
+      {/* Birds (existing) */}
+      <div className="birds" aria-hidden="true">
+        {Array.from({ length: birdCount }).map((_, i) => (
+          <div key={`b${i}`} className={`bird bird-${i + 1}`}>
+            <svg viewBox="0 0 64 32" className="bird-svg" aria-hidden="true">
+              <g fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path className="wing wing-left" d="M2 18 C10 6, 26 6, 34 18" />
+                <path className="wing wing-right" d="M30 18 C38 6, 54 6, 62 18" />
+              </g>
+            </svg>
+          </div>
         ))}
       </div>
+
+      {/* Floating bubbles */}
+      <div className="bubbles">
+        {Array.from({ length: bubbleCount }).map((_, i) => (
+          <div key={`bubble-${i}`} className={`bubble b-${i + 1}`} />
+        ))}
+      </div>
+
+      {/* Bioluminescent particles */}
+      <div className="particles">
+        {Array.from({ length: particleCount }).map((_, i) => (
+          <div key={`p-${i}`} className={`particle p-${i + 1}`} />
+        ))}
+      </div>
+
+      {/* School of fish */}
+      <div className="fish-school" aria-hidden="true">
+        {Array.from({ length: fishCount }).map((_, i) => (
+          <div key={`fish-${i}`} className={`fish fish-${i + 1}`}>
+            <svg viewBox="0 0 64 24" className="fish-svg" aria-hidden="true">
+              <path d="M2 12 C18 2, 46 2, 62 12 C46 22, 18 22, 2 12 Z" fill="rgba(255,255,255,0.07)"/>
+              <path d="M14 12 C20 9, 28 9, 34 12" stroke="rgba(255,255,255,0.24)" strokeWidth="1.6" fill="none"/>
+            </svg>
+          </div>
+        ))}
+      </div>
+
+      {/* Caustic overlay */}
+      <div className="caustics" />
     </div>
-  )
+  );
 }

@@ -1,4 +1,52 @@
-:root{
+/* cpu-scheduler/src/styles.css - add near other button rules */
+
+/* sizes */
+.btn-lg { padding: 12px 18px; font-size: 15px; border-radius: 12px; }
+.btn-sm { padding: 6px 10px; font-size: 13px; border-radius: 8px; }
+
+/* animated hover/press */
+.btn-animated {
+  transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms, opacity 150ms;
+  will-change: transform, box-shadow;
+}
+.btn-animated:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(30,40,80,0.28);
+  opacity: 0.98;
+}
+.btn-animated:active {
+  transform: translateY(-2px) scale(0.99);
+  box-shadow: 0 8px 18px rgba(10,20,40,0.22);
+}
+
+/* glowing / pulse variant for Start */
+.primary.btn-lg {
+  position: relative;
+  overflow: visible;
+}
+.primary.btn-lg::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 14px;
+  background: radial-gradient(closest-side, rgba(90,140,255,0.12), transparent 60%);
+  filter: blur(10px);
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 300ms, transform 300ms;
+  pointer-events: none;
+}
+.primary.btn-lg:hover::after { opacity: 1; transform: scale(1); }
+
+/* optional subtle attention animation (run once when timeline appears) */
+@keyframes btn-pulse {
+  0% { transform: scale(1); box-shadow: 0 6px 18px rgba(90,140,255,0.12); }
+  50% { transform: scale(1.03); box-shadow: 0 18px 40px rgba(90,140,255,0.16); }
+  100% { transform: scale(1); box-shadow: 0 6px 18px rgba(90,140,255,0.12); }
+}
+.btn-pulse-once {
+  animation: btn-pulse 700ms ease-out 1;
+}:root{
   --bg:#000000;
   --card:#061021;
   --muted:#cbd5e1;
